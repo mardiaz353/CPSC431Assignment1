@@ -1,45 +1,42 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Assignment 1 Photo Album Web Application</title>
+    <meta charset="UTF-8">
+    <title>Assignment 1 Photo Album Web Application </title>
+    <link rel="stylesheet" 
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="stylesheets/styles.css">
 </head>
 <body>
-<h1>Assignment 1 Photo Album Web Application</h1>
-<form action="gallery.php" method="POST" enctype="multipart/form-data">
-<table style="border: 0px;">
-<tr style="background: #cccccc;"> </tr>
-
-<tr>
-<td>Photo Name</td>
-<td><input type="text" name="photoName"></td>
-</tr>
-
-<tr>
-<td>Date Taken</td> 
-<td><input type="text" name="dateTaken"></td>
-</tr>
-
-<tr>
-<td>Photographer</td> 
-<td><input type="text" name="photographer"></td>
-</tr>
-
-<tr>
-<td>Location</td> 
-<td><input type="text" name="location"></td>
-</tr>
-
-<tr>
-<td>Select file</td> 
-<td><input type="file" name="file"></td>
-</tr>
-
-<tr>
-<td><button type="submit" name="submit">SUBMIT</button></td>
-</tr>
-</table>
-</form>
+    <h1>Assignment 1 Photo Album Web Application</h1>
+    <form action="gallery.php" method="post">
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <td class="cell-text">Photo Name:</td class="cell-text">
+                <td><input type="text" name="photoName"</td>
+            </tr>
+            <tr>
+                <td class="cell-text">Date Taken:</td>
+                <td><input type="text" name="dateTaken"></td>
+            </tr>
+            <tr>
+                <td class="cell-text">Photographer:</td>
+                <td><input type="text" name="photographer"></td>
+            </tr>
+            <tr>
+                <td class="cell-text">Location:</td>
+                <td><input type="text" name="location"></td>
+            </tr>
+            <tr> 
+                <td class="cell-text">Select image to upload: </td>
+                <td><input type="file" name="fileToUpload" id="fileToUpload"></td>
+            </tr>
+            <tr> 
+                <td><input class="submit-cell" type="submit" name="submit"> </td>
+            </tr>
+        </tbody>
+    </table>
+    </form>
 </body>
 </html>
-
-
