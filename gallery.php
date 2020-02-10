@@ -1,128 +1,107 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>View All Photos</title>
-</head>
-<body>
-<table style="border: 0px; padding 3px">
-
-<!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-
-.dropbtn {
-  background-color: #4CAF50;
-  color: white;
-  padding: 16px;
-  font-size: 16px;
-  border: none;
-}
-
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #f1f1f1;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
-}
-
-.dropdown-content a {
-  color: black;
-  padding: 12px 16px;,
-  text-decoration: none;
-  display: block;
-}
-
-.dropdown-content a:hover {background-color: #ddd;}
-
-.dropdown:hover .dropdown-content {display: block;}
-
-.dropdown:hover .dropbtn {background-color: #3e8e41;}
-</style>
-</head>
-<body>
-
-<h2>View All Photos</h2>
-<!--<td>Sort By</td>-->
-<div class="dropdown">
-  <button class="dropbtn">Sort By</button>
- 
-  <div class="dropdown-content">
-    <a href="#">Photo Name</a>
-    <a href="#">Photographer</a>
-	<a href="#">Date Taken</a>
-    <a href="#">Location</a>
-  </div>
-</div>
-
-<form action="index.html" method="POST" enctype="multipart/form-data">
-<table style="border: 0px;">
-<tr style="background: #cccccc;"> </tr>
-
-<tr>
-<td>Upload</td>
-<button type="submit" name="submit">Upload</button>
-</tr>
-
-</body>
-</html>
-
-<!--_______________________________________________________________________________-->
 
 <?php
-//we used 'submit' as the name inside our button
-if (isset($_POST['submit'])) {
-	//Here we need to upload the file
-	//we need to get the information of the file
-	//The super global $_FILES gets all the info from the files
-	//We get 'file' because that's what we named it in our html doc
-	$file = $_FILES['file'];
-	
-	$fileName = $_FILES['file']['name'];
-	$fileTmpName = $_FILES['file']['tmp_name'];
-	$fileSize = $_FILES['file']['size'];
-	$fileError = $_FILES['file']['error'];
-	$fileType = $_FILES['file']['type'];
+// if(isset($_POST["submit"])) {
+//     $file = $_FILES['fileToUpload'];
+//     $fileName = $_FILES['fileToUpload']['name'];
+//     $fileTmpName = $_FILES['fileToUpload']['tmp_name'];
+//     $fileError = $_FILES['fileToUpload']['error'];
+//     // this gets the extension of the file already
+//     $fileType = $_FILES['fileToUpload']['type'];
 
-	//We want to take apart the name of the file, so we explode it
-	$fileExt = explode('.', $fileName);
-	$fileActualExt = strtolower(end($fileExt));
-	
-	//Tell what files we want to allow inside the website
-	$allowed = array('jpg', 'jpeg', 'png', 'pdf');
-	
-	//This will check if the file extension is once from $allowed
-	if(in_array($fileActualExt, $allowed)) {
-		//0 means there were no errors uploading the file
-		if($fileError === 0) {
-			if($fileSize < 2000000) {
-				//We need to give the file a proper name
-				$fileNameNew = uniqid('', true).".".$fileActualExt;
-				//Now we need to tell it where to upload this file in root folder
-				$fileDestination = 'uploads/'.$fileNameNew;
-				//Create the function that moves it to the actual location
-				move_uploaded_file($fileTmpName, $fileDestination);
-				header("Location: index.php?uploadsuccess");
-			} else {
-				echo "Your file is too big!";
-			}
-		} else {
-			echo "There was an error uploading your file!";
-		}
-	} else {
-		echo "You cannont upload files of this type!";
-	}
-}
+//     //if there is a error then display error sign
+//     if($fileError > 0){
+//         echo 'Problem: ' . $fileError;
+//         exit;
+//     } 
+//     // this checks if the file extension is correct
+//     if($fileType != 'image/jpeg' && $fileType != 'image/png'){
+//         echo 'Problem: file is not a PNG image or a JPEG: ';
+//         exit;
+//     } 
 
+//      $uploaded_file = 'Users/mauriciomacias/Desktop/php/uploads/'. $fileName;
+
+//      if(is_uploaded_file($fileTmpName)){
+//          if(!move_uploaded_file($fileTmpName,$uploaded_file)){
+//              echo 'Problem: Could not move file to destination directory';
+//              exit;
+//          }
+//     }
+//     else {
+//         echo 'Problem: Possible fle upload attack. Filename: '. $fileName;
+//         exit;
+//     }
+
+//     echo 'File uploaded successfully';
+//     echo '<img src="/uploads/'.$fileName.'"/>';
+// }
 ?>
-</table>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gallery</title>
+    <link rel="stylesheet" 
+    href="<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="stylesheets/styles.css">
+</head>
+<body>
+    <header>
+        <h1>View All Photos</h1>
+
+        <div class="dropdown">
+            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Dropright</button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+            </div>
+        </div>
+    </header>
+    <div>
+        <?php
+            // echo '<div class="list-content">';
+            // echo'<img class="picture-content" src="pic.jpeg" alt="mauricio"></img>'
+            // echo'<div class="data-box">Name</div>'
+            // echo'<div class="data-box">Date</div>'
+            // echo'<div class="data-box">Location</div>'
+            // echo'<div class="data-box">Photographer</div>'
+            // echo'</div>'
+        ?>
+        <!-- The real picture box of  -->
+        
+        <div class="list-content"> 
+            <img class="picture-content" src="pic.jpeg" alt="mauricio"></img>
+            <div class="data-box">Name</div>
+            <div class="data-box">Date</div>
+            <div class="data-box">Location</div>
+            <div class="data-box">Photographer</div>
+        </div>
+        <div class="list-content"> 
+            <img class="picture-content" src="pic.jpeg" alt="mauricio"></img>
+            <div class="data-box">Name</div>
+            <div class="data-box">Date</div>
+            <div class="data-box">Location</div>
+            <div class="data-box">Photographer</div>
+        </div>
+        <div class="list-content"> 
+            <img class="picture-content" src="pic.jpeg" alt="mauricio"></img>
+            <div class="data-box">Name</div>
+            <div class="data-box">Date</div>
+            <div class="data-box">Location</div>
+            <div class="data-box">Photographer</div>
+        </div>
+        <div class="list-content"> 
+            <img class="picture-content" src="pic.jpeg" alt="mauricio"></img>
+            <div class="data-box">Name</div>
+            <div class="data-box">Date</div>
+            <div class="data-box">Location</div>
+            <div class="data-box">Photographer</div>
+        </div>
+
+
+    </div>
+</main>
 </body>
 </html>
