@@ -8,16 +8,17 @@
       font-weight: normal;
       font-style: normal;
 }
-
 h1{
     font-size: 30px;
     color: #000000;;
     text-transform: uppercase;
     font-weight: 300;
     text-align: center;
-    margin-bottom: 15px;
+    margin-bottom: 50px;
+    margin-top: 50px;
     font-family: airstreamregular;
   }
+
   table{
     width:100%;
     table-layout: fixed;
@@ -25,16 +26,47 @@ h1{
     border:black;
   }
 
+
   body {
     background: rgb(149,194,215);
   }
 
   .submit-cell {
+    width: 80%;
+    border: none;
+    text-align: center;    
+  }
+
+  .textfield-cell {
     width: 100%;
+    text-align: center;
+    align-content: left;
   }
 
   .cell-text {
-    font-size: 20px;
+    font-size: 15px;
     text-transform: uppercase;
     text-align: right;
+    padding: 12px 20px;
+    font-family: "Roboto";
+  }
+
+  .list-content {
+    display: inline-block;
+    margin-bottom: 20px;
+    margin-top: 50px;
+  }
+
+  .picture-content {
+    display: block;
+    width: 400px;
+    height: 400px;
+    border: 1px solid blue;
+    background: yellow;
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+
+  .data-box {
+    display: block;
   }
