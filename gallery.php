@@ -33,6 +33,39 @@ if(isset($_POST["submit"])) {
     }
     // echo 'File uploaded successfully';
     // echo '<img src="uploads/'.$fileName.'"/>';
+	
+	//Save meta data and name of image file to a text document
+	
+	$fp = fopen("gallery.txt", 'rw+');
+	
+	$getPhotoName = $_REQUEST['photoName'];
+	$getDateTaken = $_REQUEST['dateTaken'];
+    $getPhotoGrapher = $_REQUEST['photographer'];
+    $getLocation = $_REQUEST['location'];
+
+	$outputString = $fileName."\t".$getPhotoName."\t".$getDateTaken."\t".$getPhotoGrapher."\t".$getLocation."\n";
+	
+	
+	file_put_contents("gallery.txt", $outputString, FILE_APPEND);
+	//Use rewind() to move the pointer to the start of the file
+	rewind($fp);
+	
+	
+	/*****************************************************************
+	CONTINUE HERE:
+	
+	file_put_contents appends the latest entry to a file gallery.txt
+	When you're testing, make sure to create this file in your directory
+	
+	(Each image and its meta data are stored as its own line in gallery.txt)
+	
+	Now, each image in gallery.txt needs to be displayed in its own container
+	*********************************************************************
+	*/
+	
+	//fclose($fp);
+	
+	
 }
 ?>
 
@@ -75,6 +108,8 @@ if(isset($_POST["submit"])) {
         echo'<div class="data-box">'.$getLocation.'</div>';
         echo'</div>';
         // }
+		
+		
         ?>
     </div>
 </main>
