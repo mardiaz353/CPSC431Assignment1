@@ -1,7 +1,7 @@
 # CPSC431Assignment1
 
 # Team member names incl. CWID,
-Mauricio Macias, CWID: 
+Mauricio Macias, CWID: 890741622
 Maria Diaz, CWID: 888888914
 
 # Short introduction and explanation of each team member's contributions
