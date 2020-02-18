@@ -76,6 +76,12 @@ if(isset($_POST["submit"])) { // if a variable is declaredd when submit is press
     }
     fclose($fp); // close file
 }
+
+// TODO
+// CREATE A SORTING ALGORITHM FOR DATE
+// ALSO FIND A WAY TO CREATE A FORM TO GET TYPE OF SORT TO OUPUT
+// FROM THE FORM DATA CHANGE THE SORT ALGORITHM 
+// SO USE A SWITCH STATMENT 
 ?>
 
 <!DOCTYPE html>
@@ -118,7 +124,7 @@ if(isset($_POST["submit"])) { // if a variable is declaredd when submit is press
     <div>
         <?php
             // output picture here
-        
+        	
             //array_multisort( array_column( $bigarray, 1),SORT_ASC, $bigarray); // sort by name
             //array_multisort( array_column( $bigarray, 3),SORT_ASC, $bigarray); // sort by photographer
             array_multisort( array_column( $bigarray, 4),SORT_ASC, $bigarray); // sort by location
