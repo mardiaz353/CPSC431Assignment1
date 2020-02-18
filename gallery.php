@@ -1,20 +1,19 @@
 <?php
-if(isset($_POST["submit"])) {
+// Checks if input is valid
+if(isset($_POST["submit"])) { // if a variable is declaredd when submit is pressed
     // variables
     $file = $_FILES['fileToUpload'];
     $fileName = $_FILES['fileToUpload']['name'];
     $fileTmpName = $_FILES['fileToUpload']['tmp_name'];
     $fileError = $_FILES['fileToUpload']['error'];
-    // this gets the extension of the file already
-    $fileType = $_FILES['fileToUpload']['type'];
+    $fileType = $_FILES['fileToUpload']['type'];// this gets the extension of the file already
 
-    //if there is a error then display error sign
-    if($fileError > 0){
+    if($fileError > 0){ //if there is a error then display error sign
         echo 'Problem: '.$fileError;
         exit;
     } 
-    // this checks if the file extension is correct
-    if($fileType != 'image/jpeg' && $fileType != 'image/png'){
+    
+    if($fileType != 'image/jpeg' && $fileType != 'image/png'){ // this checks if the file extension is correct
         echo 'Problem: file is not a PNG image or a JPEG: ';
         exit;
     } 
@@ -31,41 +30,51 @@ if(isset($_POST["submit"])) {
         echo 'Problem: Possible fle upload attack. Filename: '. $fileName;
         exit;
     }
-    // echo 'File uploaded successfully';
-    // echo '<img src="uploads/'.$fileName.'"/>';
-	
-	//Save meta data and name of image file to a text document
-	
-	$fp = fopen("gallery.txt", 'rw+');
-	
-	$getPhotoName = $_REQUEST['photoName'];
-	$getDateTaken = $_REQUEST['dateTaken'];
-    $getPhotoGrapher = $_REQUEST['photographer'];
-    $getLocation = $_REQUEST['location'];
+    ?>
 
-	$outputString = $fileName."\t".$getPhotoName."\t".$getDateTaken."\t".$getPhotoGrapher."\t".$getLocation."\n";
+    <?php
+	//Save meta data and name of image file to a text document
+    $fp = fopen("gallery.txt", 'ab');
+    
+    if(!$fp){ // if fopen fails exit
+        echo '<p><strong> Your order could not be processed at this time. 
+        .Please try again later.</strong></p></body></html>';
+        exit;
+    }
+	
+	$getPhotoName = $_POST['photoName']; // input variables
+	$getDateTaken = $_POST['dateTaken']; // use _POST because its safer
+    $getPhotoGrapher = $_POST['photographer'];
+    $getLocation = $_POST['location'];
+
+    $outputString = $fileName."\t".$getPhotoName."\t".// string to append
+    $getDateTaken."\t".$getPhotoGrapher."\t".$getLocation."\n";
 	
 	
-	file_put_contents("gallery.txt", $outputString, FILE_APPEND);
+	file_put_contents("gallery.txt", $outputString, FILE_APPEND); // append data here
 	//Use rewind() to move the pointer to the start of the file
-	rewind($fp);
+    rewind($fp);
+    fclose($fp);
+    ?>
 	
-	
-	/*****************************************************************
-	CONTINUE HERE:
-	
-	file_put_contents appends the latest entry to a file gallery.txt
-	When you're testing, make sure to create this file in your directory
-	
-	(Each image and its meta data are stored as its own line in gallery.txt)
-	
-	Now, each image in gallery.txt needs to be displayed in its own container
-	*********************************************************************
-	*/
-	
-	//fclose($fp);
-	
-	
+    <?php
+    // Read file and add data to array and show pictures.
+    $fp = fopen("gallery.txt", 'rb');
+
+    if(!$fp){
+        echo 'error line 67';
+    }
+
+    $bigarray = [];
+
+    while(!feof($fp)){
+        $lines = fgets($fp); // gets the whole line
+        if($lines === false) break; // deletes empty line at the end
+        $line = explode("\t",$lines); // explodes the lines into separate varaibles
+        $tmparray = [$line[0],$line[1],$line[2],$line[3],$line[4]]; // pushing to an array
+        array_push($bigarray,$tmparray);
+    }
+    fclose($fp); // close file
 }
 ?>
 
@@ -80,36 +89,49 @@ if(isset($_POST["submit"])) {
 </head>
 <body>
     <header>
-        <h1>View All Photos</h1>
-
-        <!-- <div class="dropdown">
-            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Dropright</button>
-            <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
-            </div>
-        </div> -->
+        <h1>View All Photos</h1>   
     </header>
+
+    <table> 
+        <tr> 
+            <td> 
+            <div class="form-group">
+            <h2>Sort By:
+            <select id="sortby" class="form-control" name="sort">
+                <option value="">Select...</option>
+                <option value="name">Name</option>
+                <option value="date">Date</option>
+                <option value="photographer">Photographer</option>
+                <option value="location">Location</option>
+            </select>
+            <button type="submit" name="ok">Ok</button>
+            </h2>
+        </div>
+    </td>
+    <td> 
+        <!-- to use php go to css-tricks.com/snippets/javascript/go-back-button/ -->
+        <input type="button" value="Add another Picture" onClick="javascript:history.go(-1)" />
+    </td>
+        </tr>
+    </table>
+
     <div>
         <?php
-        // variables
-         $getPhotoName = $_REQUEST['photoName'];
-         $getDateTaken = $_REQUEST['dateTaken'];
-         $getPhotoGrapher = $_REQUEST['photographer'];
-         $getLocation = $_REQUEST['location']; 
-        // $files = scandir('folder/');
-        // foreach($files as $file){
-        echo '<div class="list-content">';
-        echo'<img class="picture-content" src="uploads/'.$fileName.'"/ alt="mauricio"></img>';
-        echo'<div class="data-box">'.$getPhotoName.'</div>';
-        echo'<div class="data-box">'.$getDateTaken.'</div>';
-        echo'<div class="data-box">'.$getPhotoGrapher.'</div>';
-        echo'<div class="data-box">'.$getLocation.'</div>';
-        echo'</div>';
-        // }
-		
-		
+            // output picture here
+        
+            //array_multisort( array_column( $bigarray, 1),SORT_ASC, $bigarray); // sort by name
+            //array_multisort( array_column( $bigarray, 3),SORT_ASC, $bigarray); // sort by photographer
+            array_multisort( array_column( $bigarray, 4),SORT_ASC, $bigarray); // sort by location
+            $len = count($bigarray); // gets bigarray length
+            for($row = 0; $row < $len; $row++){
+                echo '<div class="list-content">';
+                echo'<img class="picture-content" src="uploads/'.$bigarray[$row][0].'"/ alt="mauricio"></img>'; // fileName
+                echo'<div class="data-box">'.$bigarray[$row][1].'</div>'; // name
+                echo'<div class="data-box">'.$bigarray[$row][2].'</div>'; // date
+                echo'<div class="data-box">'.$bigarray[$row][3].'</div>'; // photographer
+                echo'<div class="data-box">'.$bigarray[$row][4].'</div>'; // location
+                echo'</div>';
+            }
         ?>
     </div>
 </main>
