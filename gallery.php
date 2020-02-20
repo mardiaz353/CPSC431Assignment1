@@ -76,22 +76,9 @@ if(isset($_POST["submit"])) { // if a variable is declaredd when submit is press
     }
 	
     fclose($fp); // close file
-
 }
 
-
-// TODO
-// CREATE A SORTING ALGORITHM FOR DATE
-// ALSO FIND A WAY TO CREATE A FORM TO GET TYPE OF SORT TO OUPUT
-// FROM THE FORM DATA CHANGE THE SORT ALGORITHM 
-// SO USE A SWITCH STATMENT 
-
-
 ?>
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
