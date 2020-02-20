@@ -57,7 +57,7 @@ if(isset($_POST["submit"])) { // if a variable is declaredd when submit is press
     fclose($fp);
     ?>
 	
-    <?php
+<?php
     // Read file and add data to array and show pictures.
     $fp = fopen("gallery.txt", 'rb');
 
@@ -74,15 +74,23 @@ if(isset($_POST["submit"])) { // if a variable is declaredd when submit is press
         $tmparray = [$line[0],$line[1],$line[2],$line[3],$line[4]]; // pushing to an array
         array_push($bigarray,$tmparray);
     }
+	
     fclose($fp); // close file
+
 }
+
 
 // TODO
 // CREATE A SORTING ALGORITHM FOR DATE
 // ALSO FIND A WAY TO CREATE A FORM TO GET TYPE OF SORT TO OUPUT
 // FROM THE FORM DATA CHANGE THE SORT ALGORITHM 
 // SO USE A SWITCH STATMENT 
+
+
 ?>
+
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -97,7 +105,8 @@ if(isset($_POST["submit"])) { // if a variable is declaredd when submit is press
     <header>
         <h1>View All Photos</h1>   
     </header>
-
+	<!-- Create a form to perform the same thing as index.php and leave it blank-->
+<form action = "gallery.php" method="post" enctype="multipart/form-data">
     <table> 
         <tr> 
             <td> 
@@ -114,20 +123,59 @@ if(isset($_POST["submit"])) { // if a variable is declaredd when submit is press
             </h2>
         </div>
     </td>
+	<form action = "gallery.php" method = "post" enctype = "multipart/form-data">
     <td> 
-        <!-- to use php go to css-tricks.com/snippets/javascript/go-back-button/ -->
-        <input type="button" value="Add another Picture" onClick="javascript:history.go(-1)" />
-    </td>
+        <!--<input type="button" value="Add another Picture" onClick="javascript:history.go(-1)" />-->
+		<!-- Go back to the uploads page if the user presses the add another picture button-->
+		<button type="submit" formaction="/index.html"> Add Another Picture</button>
+	</td>
+	</form>
         </tr>
     </table>
-
+</form>
     <div>
         <?php
             // output picture here
-        	
-            //array_multisort( array_column( $bigarray, 1),SORT_ASC, $bigarray); // sort by name
-            //array_multisort( array_column( $bigarray, 3),SORT_ASC, $bigarray); // sort by photographer
-            array_multisort( array_column( $bigarray, 4),SORT_ASC, $bigarray); // sort by location
+//If the user has pressed the ok button for sort....
+if (isset($_POST["ok"])) {
+//...have gallery.txt be read into $bigarray since the form has refreshed...
+	 $fp = fopen("gallery.txt", 'rb');
+
+    if(!$fp){
+        echo 'error line 67';
+    }
+	
+    $bigarray = [];
+
+    while(!feof($fp)){
+        $lines = fgets($fp); // gets the whole line
+        if($lines === false) break; // deletes empty line at the end
+        $line = explode("\t",$lines); // explodes the lines into separate varaibles
+        $tmparray = [$line[0],$line[1],$line[2],$line[3],$line[4]]; // pushing to an array
+        array_push($bigarray,$tmparray);
+    }
+	
+    fclose($fp); // close file
+// ...And sort the array according to which "sort" method the user selected in the dropdown
+	switch($_POST["sort"]) {
+		
+		case 'name':
+			array_multisort( array_column( $bigarray, 1),SORT_ASC, $bigarray);
+			break;
+		case 'date':
+			array_multisort( array_column( $bigarray, 2), SORT_ASC, $bigarray);
+			break;
+		case 'photographer':
+			array_multisort( array_column( $bigarray, 3),SORT_ASC, $bigarray);
+			break;
+		case 'location':
+			array_multisort( array_column( $bigarray, 4),SORT_ASC, $bigarray);
+			break;
+		default:
+			echo "broken on line 101 in gallery.php \n";
+	}
+} 
+//Display the gallery by using a for loop and echo data-boxes to the screen
             $len = count($bigarray); // gets bigarray length
             for($row = 0; $row < $len; $row++){
                 echo '<div class="list-content">';
