@@ -1,20 +1,20 @@
 # CPSC431Assignment1
 
-# Team member names incl. CWID,
+## Team member names incl. CWID,
 Mauricio Macias, CWID: 890741622
 Maria Diaz, CWID: 888888914
 
-# Short introduction and explanation of each team member's contributions
-Mauricio organized the forms and php file and introduced the final style sheets to the project. 
-He also prototyped and wrote the sorting algorithm for the "sort by" button and prototyped the gallery page
-including code to retrieve and display the images.
+## Short introduction and explanation of each team member's contributions
+Mauricio added the style sheets and created the "look" of the project's index. html and gallery.php files. 
+He also took the index.html prototype and created the final file, added the use of style sheets. Mauricio added error checking to the gallery.php and created the entire front end of gallery.php. He also created the loop that gets the metadata from gallery.txt and puts it in an array and displays the gallery.
 
-Maria prototyped the design and php code for upload photo and user information page.
-She also prototyped and wrote the file system storage portion in which user information is stored as a text file
-and wrote the readme file
+Maria prototyped the design and php code for upload photo and user information page. She also prototyped and wrote the file system storage portion in which user information is read to and saved as a text file. She wrote this readme file. She also wrote the gallery.php sorting algorithm and connected it to the drop down menu.
 
-# Complete contents of gallery.php file incl. comments
+Both worked on debugging and suggesting solutions.
 
+## Complete contents of gallery.php file incl. comments
+
+`code()`
 <?php
 if(isset($_POST["submit"])) {
     // variables
