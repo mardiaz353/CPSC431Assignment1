@@ -14,77 +14,65 @@ Both worked on debugging and suggesting solutions.
 
 ## Complete contents of gallery.php file incl. comments
 
-`code()`
-<?php
-if(isset($_POST["submit"])) {
-    // variables
-    $file = $_FILES['fileToUpload'];
-    $fileName = $_FILES['fileToUpload']['name'];
-    $fileTmpName = $_FILES['fileToUpload']['tmp_name'];
-    $fileError = $_FILES['fileToUpload']['error'];
-    // this gets the extension of the file already
-    $fileType = $_FILES['fileToUpload']['type'];
 
-    //if there is a error then display error sign
-    if($fileError > 0){
-        echo 'Problem: '.$fileError;
-        exit;
-    } 
-    // this checks if the file extension is correct
-    if($fileType != 'image/jpeg' && $fileType != 'image/png'){
-        echo 'Problem: file is not a PNG image or a JPEG: ';
-        exit;
-    } 
+		<?php
+		if(isset($_POST["submit"])) {
+		    // variables
+		    $file = $_FILES['fileToUpload'];
+		    $fileName = $_FILES['fileToUpload']['name'];
+		    $fileTmpName = $_FILES['fileToUpload']['tmp_name'];
+		    $fileError = $_FILES['fileToUpload']['error'];
+		    // this gets the extension of the file already
+		    $fileType = $_FILES['fileToUpload']['type'];
 
-     $uploaded_file = 'uploads/'.$fileName;
+		    //if there is a error then display error sign
+		    if($fileError > 0){
+			echo 'Problem: '.$fileError;
+			exit;
+		    } 
+		    // this checks if the file extension is correct
+		    if($fileType != 'image/jpeg' && $fileType != 'image/png'){
+			echo 'Problem: file is not a PNG image or a JPEG: ';
+			exit;
+		    } 
 
-     if(is_uploaded_file($fileTmpName)){
-         if(!move_uploaded_file($fileTmpName,$uploaded_file)){
-             echo 'Problem: Could not move file to destination directory';
-             exit;
-         }
-    }
-    else {
-        echo 'Problem: Possible fle upload attack. Filename: '. $fileName;
-        exit;
-    }
-    // echo 'File uploaded successfully';
-    // echo '<img src="uploads/'.$fileName.'"/>';
-	
-	//Save meta data and name of image file to a text document
-	
-	$fp = fopen("gallery.txt", 'rw+');
-	
-	$getPhotoName = $_REQUEST['photoName'];
-	$getDateTaken = $_REQUEST['dateTaken'];
-    $getPhotoGrapher = $_REQUEST['photographer'];
-    $getLocation = $_REQUEST['location'];
+		     $uploaded_file = 'uploads/'.$fileName;
 
-	$outputString = $fileName."\t".$getPhotoName."\t".$getDateTaken."\t".$getPhotoGrapher."\t".$getLocation."\n";
+		     if(is_uploaded_file($fileTmpName)){
+			 if(!move_uploaded_file($fileTmpName,$uploaded_file)){
+			     echo 'Problem: Could not move file to destination directory';
+			     exit;
+			 }
+		    }
+		    else {
+			echo 'Problem: Possible fle upload attack. Filename: '. $fileName;
+			exit;
+		    }
+		    // echo 'File uploaded successfully';
+		    // echo '<img src="uploads/'.$fileName.'"/>';
+
+			//Save meta data and name of image file to a text document
+
+			$fp = fopen("gallery.txt", 'rw+');
+
+		$getPhotoName = $_REQUEST['photoName'];
+		$getDateTaken = $_REQUEST['dateTaken'];
+	    	$getPhotoGrapher = $_REQUEST['photographer'];
+	    	$getLocation = $_REQUEST['location'];
+
+		$outputString = $fileName."\t".$getPhotoName."\t".$getDateTaken."\t".$getPhotoGrapher."\t".$getLocation."\n";
 	
 	
-	file_put_contents("gallery.txt", $outputString, FILE_APPEND);
-	//Use rewind() to move the pointer to the start of the file
-	rewind($fp);
+		file_put_contents("gallery.txt", $outputString, FILE_APPEND);
+		//Use rewind() to move the pointer to the start of the file
+		rewind($fp);
 	
-	
-	/*****************************************************************
-	CONTINUE HERE:
-	
-	file_put_contents appends the latest entry to a file gallery.txt
-	When you're testing, make sure to create this file in your directory
-	
-	(Each image and its meta data are stored as its own line in gallery.txt)
-	
-	Now, each image in gallery.txt needs to be displayed in its own container
-	*********************************************************************
-	*/
 	
 	//fclose($fp);
 	
 	
-}
-?>
+	}
+	?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -97,6 +85,7 @@ if(isset($_POST["submit"])) {
 </head>
 <body>
     <header>
+							
         <h1>View All Photos</h1>
 
         <!-- <div class="dropdown">
@@ -132,3 +121,4 @@ if(isset($_POST["submit"])) {
 </main>
 </body>
 </html>
+
