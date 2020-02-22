@@ -18,11 +18,14 @@ if(isset($_POST["submit"])) { // if a variable is declaredd when submit is press
         exit;
     } 
 
-     $uploaded_file = 'uploads/'.$fileName;
-
+     //$uploaded_file = 'uploads/'.$fileName;
+	 $uploaded_file = $fileName;
      if(is_uploaded_file($fileTmpName)){
-         if(!move_uploaded_file($fileTmpName,$uploaded_file)){
+		if(!move_uploaded_file($fileTmpName,$uploaded_file)){
+			echo '\t $FILES[$uploaded_file][$fileTmpName]'.$_FILES[$uploaded_file][$fileTmpName].'\t';
+		//if(!move_uploaded_file($_FILES[$uploaded_file][$fileTmpName], "uploads/".$_FILES[$uploaded_file][$fileName]);
              echo 'Problem: Could not move file to destination directory';
+			 echo '\t $fileName = '.$fileName.'\t';
              exit;
          }
     }
@@ -76,9 +79,14 @@ if(isset($_POST["submit"])) { // if a variable is declaredd when submit is press
     }
 	
     fclose($fp); // close file
+
 }
 
 ?>
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -114,7 +122,8 @@ if(isset($_POST["submit"])) { // if a variable is declaredd when submit is press
     <td> 
         <!--<input type="button" value="Add another Picture" onClick="javascript:history.go(-1)" />-->
 		<!-- Go back to the uploads page if the user presses the add another picture button-->
-		<button type="submit" formaction="/index.html"> Add Another Picture</button>
+		<!--<button type="submit" formaction="/index.html"> Add Another Picture</button>-->
+		<button type="submit" formaction="/~cs431s28/assignment1/index.html"> Add Another Picture</button>
 	</td>
 	</form>
         </tr>
@@ -166,7 +175,7 @@ if (isset($_POST["ok"])) {
             $len = count($bigarray); // gets bigarray length
             for($row = 0; $row < $len; $row++){
                 echo '<div class="list-content">';
-                echo'<img class="picture-content" src="uploads/'.$bigarray[$row][0].'"/ alt="mauricio"></img>'; // fileName
+                echo'<img class="picture-content" src="uploads/'.$bigarray[$row][0].'"/ alt="Something wrong"></img>'; // fileName
                 echo'<div class="data-box">'.$bigarray[$row][1].'</div>'; // name
                 echo'<div class="data-box">'.$bigarray[$row][2].'</div>'; // date
                 echo'<div class="data-box">'.$bigarray[$row][3].'</div>'; // photographer
