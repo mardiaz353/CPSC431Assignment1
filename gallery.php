@@ -71,7 +71,8 @@ if(isset($_POST["submit"])) { //if a variable is declared when submit is pressed
         .Please try again later.</strong></p></body></html>';
         exit;
     }
-	
+    
+    // all input is trimed and uppercase
 	$getPhotoName = strtoupper(trim($_POST['photoName'])); // input variables 
 	$getDateTaken = trim($_POST['dateTaken']); // use _POST because its safer
     $getPhotoGrapher = strtoupper(trim($_POST['photographer']));
@@ -152,8 +153,7 @@ if(isset($_POST["submit"])) { //if a variable is declared when submit is pressed
 </form>
     <div>
         <?php
-        $answer='non';
-            // output picture here
+        $answer='name';
 //If the user has pressed the ok button for sort....
 if (isset($_POST["ok"])) {
 //...have gallery.txt be read into $bigarray since the form has refreshed...
@@ -177,22 +177,16 @@ if (isset($_POST["ok"])) {
 }
 
 // ...And sort the array according to which "sort" method the user selected in the dropdown
-
-if($answer === 'non'){
-    echo 'non';
-} else if($answer === 'name'){
-    echo 'name';
-    array_multisort( array_column( $bigarray, 1),SORT_ASC, $bigarray);
+if($answer === 'name'){
+    array_multisort( array_column( $bigarray, 1),SORT_ASC,  $bigarray);
 } else if($answer === 'date'){
-    echo 'date';
-    array_multisort( array_column( $bigarray, 2),SORT_ASC, $bigarray);
+    array_multisort( array_column( $bigarray, 2),SORT_ASC, SORT_NUMERIC, $bigarray);
 } else if($answer === 'photographer'){
-    echo 'photographer';
     array_multisort( array_column( $bigarray, 3),SORT_ASC, $bigarray);
 } else if($answer === 'location'){
-    echo 'location';
     array_multisort( array_column( $bigarray, 4),SORT_ASC, $bigarray);
 }
+
 //Display the gallery by using a for loop and echo data-boxes to the screen
 $len = count($bigarray); // gets bigarray length
 for($row = 0; $row < $len; $row++){
@@ -205,7 +199,7 @@ for($row = 0; $row < $len; $row++){
     echo'</div>';
 }
 ?>
-    </div>
+</div>
 </main>
 </body>
 </html>
