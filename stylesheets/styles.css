@@ -31,18 +31,6 @@ h1{
     background: rgb(149,194,215);
   }
 
-  .submit-cell {
-    width: 80%;
-    border: none;
-    text-align: center;    
-  }
-
-  .textfield-cell {
-    width: 100%;
-    text-align: center;
-    align-content: left;
-  }
-
   .cell-text {
     font-size: 15px;
     text-transform: uppercase;
@@ -53,18 +41,20 @@ h1{
 
   .list-content {
     display: inline-block;
-    margin-bottom: 20px;
-    margin-top: 50px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
   }
 
   .picture-content {
-    display: block;
-    width: 400px;
-    height: 400px;
+    display: flex;
+    min-width: 200px;
+    max-width: 400px;
     border: 1px solid blue;
     background: yellow;
     margin-right: 10px;
     margin-bottom: 10px;
+    flex: auto;
   }
 
   .data-box {
