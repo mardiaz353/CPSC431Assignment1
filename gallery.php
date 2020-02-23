@@ -18,8 +18,8 @@ if(isset($_POST["submit"])) { // if a variable is declaredd when submit is press
         exit;
     } 
 
-     //$uploaded_file = 'uploads/'.$fileName;
-	 $uploaded_file = $fileName;
+     $uploaded_file = 'uploads/'.$fileName;
+	 //$uploaded_file = $fileName;
      if(is_uploaded_file($fileTmpName)){
 		if(!move_uploaded_file($fileTmpName,$uploaded_file)){
 			echo '\t $FILES[$uploaded_file][$fileTmpName]'.$_FILES[$uploaded_file][$fileTmpName].'\t';
@@ -33,6 +33,8 @@ if(isset($_POST["submit"])) { // if a variable is declaredd when submit is press
         echo 'Problem: Possible fle upload attack. Filename: '. $fileName;
         exit;
     }
+	//Move the images to the uploads folder in the assignment1 subdirectory 'uploads'
+	rename($uploaded_file, "uploads/".$uploaded_file);
     ?>
 
     <?php
