@@ -1,40 +1,65 @@
 <?php
+// since the schools server does not support array_column I wrote it here
+if (! function_exists('array_column')) {
+    function array_column(array $input, $columnKey, $indexKey = null) {
+        $array = array();
+        foreach ($input as $value) {
+            if ( !array_key_exists($columnKey, $value)) {
+                trigger_error("Key \"$columnKey\" does not exist in array");
+                return false;
+            }
+            if (is_null($indexKey)) {
+                $array[] = $value[$columnKey];
+            }
+            else {
+                if ( !array_key_exists($indexKey, $value)) {
+                    trigger_error("Key \"$indexKey\" does not exist in array");
+                    return false;
+                }
+                if ( ! is_scalar($value[$indexKey])) {
+                    trigger_error("Key \"$indexKey\" does not contain scalar value");
+                    return false;
+                }
+                $array[$value[$indexKey]] = $value[$columnKey];
+            }
+        }
+        return $array;
+    }
+}
+?>
+<?php
 // Checks if input is valid
-if(isset($_POST["submit"])) { // if a variable is declaredd when submit is pressed
+if(isset($_POST["submit"])) { //if a variable is declared when submit is pressed
     // variables
     $file = $_FILES['fileToUpload'];
     $fileName = $_FILES['fileToUpload']['name'];
     $fileTmpName = $_FILES['fileToUpload']['tmp_name'];
     $fileError = $_FILES['fileToUpload']['error'];
-    $fileType = $_FILES['fileToUpload']['type'];// this gets the extension of the file already
+    $fileType = $_FILES['fileToUpload']['type'];// Gets the ext of file
+    $document_root = $_SERVER['DOCUMENT_ROOT'];
 
     if($fileError > 0){ //if there is a error then display error sign
         echo 'Problem: '.$fileError;
         exit;
     } 
     
-    if($fileType != 'image/jpeg' && $fileType != 'image/png'){ // this checks if the file extension is correct
+    // this checks if the file extension is correct
+    if($fileType != 'image/jpeg' && $fileType != 'image/png'){
         echo 'Problem: file is not a PNG image or a JPEG: ';
         exit;
     } 
-
      $uploaded_file = 'uploads/'.$fileName;
-	 //$uploaded_file = $fileName;
+
      if(is_uploaded_file($fileTmpName)){
-		if(!move_uploaded_file($fileTmpName,$uploaded_file)){
-			echo '\t $FILES[$uploaded_file][$fileTmpName]'.$_FILES[$uploaded_file][$fileTmpName].'\t';
-		//if(!move_uploaded_file($_FILES[$uploaded_file][$fileTmpName], "uploads/".$_FILES[$uploaded_file][$fileName]);
+         if(!move_uploaded_file($fileTmpName,$uploaded_file)){
              echo 'Problem: Could not move file to destination directory';
-			 echo '\t $fileName = '.$fileName.'\t';
              exit;
          }
     }
     else {
-        echo 'Problem: Possible fle upload attack. Filename: '. $fileName;
+        echo 'Problem: Possible file upload attack. Filename: '. $fileName;
         exit;
     }
-	//Move the images to the uploads folder in the assignment1 subdirectory 'uploads'
-	rename($uploaded_file, "uploads/".$uploaded_file);
     ?>
 
     <?php
@@ -47,10 +72,10 @@ if(isset($_POST["submit"])) { // if a variable is declaredd when submit is press
         exit;
     }
 	
-	$getPhotoName = $_POST['photoName']; // input variables
-	$getDateTaken = $_POST['dateTaken']; // use _POST because its safer
-    $getPhotoGrapher = $_POST['photographer'];
-    $getLocation = $_POST['location'];
+	$getPhotoName = strtoupper(trim($_POST['photoName'])); // input variables 
+	$getDateTaken = trim($_POST['dateTaken']); // use _POST because its safer
+    $getPhotoGrapher = strtoupper(trim($_POST['photographer']));
+    $getLocation = strtoupper(trim($_POST['location']));
 
     $outputString = $fileName."\t".$getPhotoName."\t".// string to append
     $getDateTaken."\t".$getPhotoGrapher."\t".$getLocation."\n";
@@ -67,7 +92,8 @@ if(isset($_POST["submit"])) { // if a variable is declaredd when submit is press
     $fp = fopen("gallery.txt", 'rb');
 
     if(!$fp){
-        echo 'error line 67';
+        echo 'error reading file!';
+        exit;
     }
 
     $bigarray = [];
@@ -79,23 +105,18 @@ if(isset($_POST["submit"])) { // if a variable is declaredd when submit is press
         $tmparray = [$line[0],$line[1],$line[2],$line[3],$line[4]]; // pushing to an array
         array_push($bigarray,$tmparray);
     }
-	
-    fclose($fp); // close file
 
+    fclose($fp); // close file
 }
 
 ?>
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Gallery</title>
     <link rel="stylesheet" 
-    href="<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
     <link rel="stylesheet" href="stylesheets/styles.css">
 </head>
 <body>
@@ -108,31 +129,30 @@ if(isset($_POST["submit"])) { // if a variable is declaredd when submit is press
         <tr> 
             <td> 
             <div class="form-group">
-            <h2>Sort By:
-            <select id="sortby" class="form-control" name="sort">
-                <option value="">Select...</option>
-                <option value="name">Name</option>
-                <option value="date">Date</option>
-                <option value="photographer">Photographer</option>
-                <option value="location">Location</option>
-            </select>
-            <button type="submit" name="ok">Ok</button>
-            </h2>
-        </div>
-    </td>
-	<form action = "gallery.php" method = "post" enctype = "multipart/form-data">
-    <td> 
-        <!--<input type="button" value="Add another Picture" onClick="javascript:history.go(-1)" />-->
-		<!-- Go back to the uploads page if the user presses the add another picture button-->
-		<!--<button type="submit" formaction="/index.html"> Add Another Picture</button>-->
-		<button type="submit" formaction="/~cs431s28/assignment1/index.html"> Add Another Picture</button>
-	</td>
-	</form>
+                <h2>Sort By:
+                <select id="sortby" class="form-control" name="sort">
+                    <option value="name">Name</option>
+                    <option value="date">Date</option>
+                    <option value="photographer">Photographer</option>
+                    <option value="location">Location</option>
+                </select>
+                <button type="submit" name="ok">Ok</button>
+                </h2>
+            </div>
+            </td>
+	        <form action = "gallery.php" method = "post" enctype = "multipart/form-data">
+            <td> 
+            <!--<input type="button" value="Add another Picture" onClick="javascript:history.go(-1)" />-->
+		    <!-- Go back to the uploads page if the user presses the add another picture button-->
+		    <button type="submit" formaction="$document_root/../index.html"> Add Another Picture</button>
+	        </td>
+	        </form>
         </tr>
     </table>
 </form>
     <div>
         <?php
+        $answer='non';
             // output picture here
 //If the user has pressed the ok button for sort....
 if (isset($_POST["ok"])) {
@@ -140,9 +160,10 @@ if (isset($_POST["ok"])) {
 	 $fp = fopen("gallery.txt", 'rb');
 
     if(!$fp){
-        echo 'error line 67';
+        echo 'error reading file';
     }
 	
+    $answer = $_POST["sort"];
     $bigarray = [];
 
     while(!feof($fp)){
@@ -152,39 +173,38 @@ if (isset($_POST["ok"])) {
         $tmparray = [$line[0],$line[1],$line[2],$line[3],$line[4]]; // pushing to an array
         array_push($bigarray,$tmparray);
     }
-	
     fclose($fp); // close file
+}
+
 // ...And sort the array according to which "sort" method the user selected in the dropdown
-	switch($_POST["sort"]) {
-		
-		case 'name':
-			array_multisort( array_column( $bigarray, 1),SORT_ASC, $bigarray);
-			break;
-		case 'date':
-			array_multisort( array_column( $bigarray, 2), SORT_ASC, $bigarray);
-			break;
-		case 'photographer':
-			array_multisort( array_column( $bigarray, 3),SORT_ASC, $bigarray);
-			break;
-		case 'location':
-			array_multisort( array_column( $bigarray, 4),SORT_ASC, $bigarray);
-			break;
-		default:
-			echo "broken on line 101 in gallery.php \n";
-	}
-} 
+
+if($answer === 'non'){
+    echo 'non';
+} else if($answer === 'name'){
+    echo 'name';
+    array_multisort( array_column( $bigarray, 1),SORT_ASC, $bigarray);
+} else if($answer === 'date'){
+    echo 'date';
+    array_multisort( array_column( $bigarray, 2),SORT_ASC, $bigarray);
+} else if($answer === 'photographer'){
+    echo 'photographer';
+    array_multisort( array_column( $bigarray, 3),SORT_ASC, $bigarray);
+} else if($answer === 'location'){
+    echo 'location';
+    array_multisort( array_column( $bigarray, 4),SORT_ASC, $bigarray);
+}
 //Display the gallery by using a for loop and echo data-boxes to the screen
-            $len = count($bigarray); // gets bigarray length
-            for($row = 0; $row < $len; $row++){
-                echo '<div class="list-content">';
-                echo'<img class="picture-content" src="uploads/'.$bigarray[$row][0].'"/ alt="Something wrong"></img>'; // fileName
-                echo'<div class="data-box">'.$bigarray[$row][1].'</div>'; // name
-                echo'<div class="data-box">'.$bigarray[$row][2].'</div>'; // date
-                echo'<div class="data-box">'.$bigarray[$row][3].'</div>'; // photographer
-                echo'<div class="data-box">'.$bigarray[$row][4].'</div>'; // location
-                echo'</div>';
-            }
-        ?>
+$len = count($bigarray); // gets bigarray length
+for($row = 0; $row < $len; $row++){
+    echo '<div class="list-content">'; // fileName 
+    echo'<img class="picture-content" src="uploads/'.$bigarray[$row][0].'"/ alt="Error on Displaying"></img>';
+    echo'<div class="data-box">'.$bigarray[$row][1].'</div>'; // name
+    echo'<div class="data-box">'.$bigarray[$row][2].'</div>'; // date
+    echo'<div class="data-box">'.$bigarray[$row][3].'</div>'; // photographer
+    echo'<div class="data-box">'.$bigarray[$row][4].'</div>'; // location
+    echo'</div>';
+}
+?>
     </div>
 </main>
 </body>
